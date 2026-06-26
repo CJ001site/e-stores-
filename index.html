@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Mode Marketplace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght=700&family=Poppins:wght=400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #ff6b6b;
+            --secondary-color: #4ecdc4;
+            --dark-color: #2f2f2f;
+            --light-color: #f7f9fa;
+            --banner-orange: #ff5722;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            padding-bottom: 70px; /* Space for bottom nav bar */
+        }
+
+        .hidden { display: none !important; }
+
+        /* Welcome / Landing Screen */
+        #welcome-screen {
+            height: 100vh;
+            background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            animation: gradientBG 10s ease infinite;
+            background-size: 400% 400%;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #welcome-screen h1 {
+            font-size: 4rem;
+            color: white;
+            text-shadow: 2px 4px 10px rgba(0,0,0,0.15);
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background-color: white;
+            color: var(--primary-color);
+            padding: 12px 35px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        /* Header Layout */
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .site-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .handwriting {
+            font-family: 'Caveat', cursive;
+            font-size: 2.3rem;
+            color: var(--primary-color);
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            background-color: #f1f3f4;
+            font-size: 0.95rem;
+        }
+
+        .call-order-banner {
+            background-color: var(--banner-orange);
+            color: white;
+            text-align: center;
+            padding: 10px 15px;
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+
+        .call-order-banner a {
+            color: white;
+            text-decoration: none;
+            border-bottom: 1px dashed white;
+        }
+
+        /* Products Grid */
+        main {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background-color: #eaeaea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            font-size: 0.9rem;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 5px; }
+        .product-meta { font-size: 0.85rem; color: #777; margin-bottom: 10px; }
+        .product-price { font-size: 1.2rem; color: var(--primary-color); font-weight: 600; margin-bottom: 15px; }
+
+        .order-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        /* Jumia-Style Bottom Navigation Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background-color: white;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: #777;
+            cursor: pointer;
+            text-decoration: none;
+            background: none;
+            border: none;
+            flex: 1;
+        }
+
+        .nav-item.active {
+            color: var(--banner-orange);
+        }
+
+        .nav-icon {
+            font-size: 1.4rem;
+            margin-bottom: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <section id="welcome-screen">
+        <h1 id="welcome-text">Welcome</h1>
+        <button class="btn" onclick="playWelcomeAndOpenModal()">Sign Up</button>
+    </section>
+
+    <div id="mode-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h2>Select Account Mode</h2>
+            <div class="mode-select-btns">
+                <button class="btn" style="background: var(--secondary-color); color: white;" onclick="openSignUp('user')">User Mode</button>
+                <button class="btn" style="background: var(--primary-color); color: white;" onclick="openSignUp('creator')">Creator Mode</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="auth-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h2 id="auth-title">Sign Up</h2>
+            <form id="signup-form" onsubmit="handleSignUp(event)">
+                <div class="input-group hidden" id="group-code">
+                    <label for="reg-code">Special Creator Code</label>
+                    <input type="password" id="reg-code" placeholder="Enter special code">
+                </div>
+                <div class="input-group">
+                    <label for="reg-email">Gmail Address</label>
+                    <input type="email" id="reg-email" required placeholder="example@gmail.com">
+                </div>
+                <div class="input-group hidden" id="group-username">
+                    <label for="reg-username">Username</label>
+                    <input type="text" id="reg-username" placeholder="Choose a username">
+                </div>
+                <div class="input-group hidden" id="group-phone">
+                    <label for="reg-phone">Phone Number</label>
+                    <input type="tel" id="reg-phone" placeholder="e.g., 02018883300">
+                </div>
+                <div class="input-group hidden" id="group-business">
+                    <label for="reg-business">Business Name</label>
+                    <input type="text" id="reg-business" placeholder="e.g., Becky's Stores">
+                </div>
+                <button type="submit" class="btn" style="width: 100%; background: var(--dark-color); color: white; margin-top: 10px;">Get Started</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="post-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h2>Post a New Product</h2>
+            <form id="post-form" onsubmit="handleCreatePost(event)">
+                <div class="input-group">
+                    <label for="prod-title">Product Name</label>
+                    <input type="text" id="prod-title" required>
+                </div>
+                <div class="input-group">
+                    <label for="prod-price">Price (₦)</label>
+                    <input type="text" id="prod-price" required>
+                </div>
+                <div class="input-group">
+                    <label for="prod-img">Image URL (Optional)</label>
+                    <input type="url" id="prod-img">
+                </div>
+                <button type="submit" class="btn" style="width: 100%; background: var(--primary-color); color: white;">Publish Product</button>
+                <button type="button" class="btn" style="width: 100%; background: #ccc; color: white; margin-top: 10px;" onclick="toggleModal('post-modal', false)">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="app-dashboard" class="hidden">
+        <header>
+            <div class="header-container">
+                <div id="site-logo" class="site-title">Marketplace</div>
+                <div class="search-bar">
+                    <input type="text" id="search-input" oninput="handleSearch()" placeholder="Search items...">
+                </div>
+            </div>
+            <div id="emergency-banner" class="call-order-banner">
+                CALL TO ORDER: <a id="banner-phone-link" href="tel:02018883300">02018883300</a>
+            </div>
+        </header>
+
+        <main id="main-content-area">
+            <div id="home-view">
+                <div class="action-bar">
+                    <h3 id="welcome-user-msg">Welcome Back!</h3>
+                    <button id="btn-drop-post" class="btn hidden" style="background: var(--primary-color); color: white;" onclick="toggleModal('post-modal', true)">+ Drop Post</button>
+                </div>
+                <div class="products-grid" id="products-container"></div>
+            </div>
+
+            <div id="categories-view" class="hidden" style="text-align: center; padding: 40px 10px;">
+                <h2>Categories</h2>
+                <p style="color:#777; margin-top:10px;">Clothes • Shoes • Electrical Appliances</p>
+            </div>
+
+            <div id="account-view" class="hidden" style="padding: 20px; max-width: 500px; margin: 0 auto;">
+                <h2>My Account Profile</h2>
+                <div id="profile-details-card" style="background:white; padding:20px; border-radius:10px; margin-top:15px; box-shadow:0 2px 5px rgba(0,0,0,0.05);"></div>
+            </div>
+        </main>
+
+        <nav class="bottom-nav">
+            <button class="nav-item active" id="nav-home" onclick="switchView('home')">
+                <div class="nav-icon">🏠</div>
+                <div>Home</div>
+            </button>
+            <button class="nav-item" id="nav-categories" onclick="switchView('categories')">
+                <div class="nav-icon">📋</div>
+                <div>Categories</div>
+            </button>
+            <button class="nav-item" id="nav-account" onclick="switchView('account')">
+                <div class="nav-icon">👤</div>
+                <div>Account</div>
+            </button>
+        </nav>
+    </div>
+
+    <script>
+        // Your Google Apps Script Web App Endpoint URL integrated cleanly below
+        const GOOGLE_SCRIPT_API_URL = "https://script.google.com/macros/s/AKfycbwxKGpHVljkfP9K0oT6_NEeZ5LdeB7HQ769pEiiMU_Od9kpITBuh8U79OCNNx9UHdsm/exec";
+
+        let appState = {
+            currentMode: '', 
+            userSession: null,
+            products: []
+        };
+
+        function playWelcomeAndOpenModal() {
+            if ('speechSynthesis' in window) {
+                let utterance = new SpeechSynthesisUtterance("Welcome");
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+            toggleModal('mode-modal', true);
+        }
+
+        function toggleModal(modalId, show) {
+            const modal = document.getElementById(modalId);
+            if(show) modal.classList.remove('hidden');
+            else modal.classList.add('hidden');
+        }
+
+        function openSignUp(mode) {
+            appState.currentMode = mode;
+            toggleModal('mode-modal', false);
+            toggleModal('auth-modal', true);
+
+            document.getElementById('auth-title').innerText = mode === 'creator' ? 'Creator Registration' : 'User Registration';
+            document.getElementById('group-code').classList.toggle('hidden', mode !== 'creator');
+            document.getElementById('group-phone').classList.toggle('hidden', mode !== 'creator');
+            document.getElementById('group-business').classList.toggle('hidden', mode !== 'creator');
+            document.getElementById('group-username').classList.toggle('hidden', mode !== 'user');
+        }
+
+        async function handleSignUp(e) {
+            e.preventDefault();
+            const email = document.getElementById('reg-email').value;
+
+            if (appState.currentMode === 'creator') {
+                const code = document.getElementById('reg-code').value;
+                const businessName = document.getElementById('reg-business').value;
+                const phone = document.getElementById('reg-phone').value;
+
+                if (code !== '12345') {
+                    alert('Incorrect special verification code.');
+                    return;
+                }
+
+                appState.userSession = { email, businessName, phone, mode: 'creator' };
+                
+                const logo = document.getElementById('site-logo');
+                logo.innerText = businessName;
+                logo.classList.add('handwriting');
+
+                updateCallBanner(phone);
+                document.getElementById('btn-drop-post').classList.remove('hidden');
+            } else {
+                const username = document.getElementById('reg-username').value;
+                appState.userSession = { email, username, mode: 'user' };
+                updateCallBanner("02018883300"); 
+            }
+
+            document.getElementById('welcome-screen').classList.add('hidden');
+            toggleModal('auth-modal', false);
+            document.getElementById('app-dashboard').classList.remove('hidden');
+            
+            document.getElementById('welcome-user-msg').innerText = `Logged in as: ${appState.userSession.username || appState.userSession.businessName}`;
+            
+            await fetchDatabaseProducts();
+        }
+
+        function updateCallBanner(phoneNumber) {
+            const linkElement = document.getElementById('banner-phone-link');
+            linkElement.innerText = phoneNumber;
+            linkElement.href = `tel:${phoneNumber}`;
+        }
+
+        function switchView(viewName) {
+            document.getElementById('home-view').classList.toggle('hidden', viewName !== 'home');
+            document.getElementById('categories-view').classList.toggle('hidden', viewName !== 'categories');
+            document.getElementById('account-view').classList.toggle('hidden', viewName !== 'account');
+
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(`nav-${viewName}`).classList.add('active');
+
+            if(viewName === 'account') {
+                renderProfileView();
+            }
+        }
+
+        function renderProfileView() {
+            const infoCard = document.getElementById('profile-details-card');
+            if(appState.userSession) {
+                infoCard.innerHTML = `
+                    <p><strong>Account Mode:</strong> ${appState.userSession.mode.toUpperCase()}</p>
+                    <p><strong>Email:</strong> ${appState.userSession.email}</p>
+                    ${appState.userSession.username ? `<p><strong>Username:</strong> ${appState.userSession.username}</p>` : ''}
+                    ${appState.userSession.businessName ? `<p><strong>Business Name:</strong> ${appState.userSession.businessName}</p>` : ''}
+                    ${appState.userSession.phone ? `<p><strong>Contact Line:</strong> ${appState.userSession.phone}</p>` : ''}
+                `;
+            }
+        }
+
+        async function fetchDatabaseProducts() {
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_API_URL);
+                const data = await response.json();
+                appState.products = data;
+                renderProducts(appState.products);
+            } catch (err) {
+                console.error("Database connection fault:", err);
+            }
+        }
+
+        async function handleCreatePost(e) {
+            e.preventDefault();
+            const title = document.getElementById('prod-title').value;
+            const price = document.getElementById('prod-price').value;
+            const img = document.getElementById('prod-img').value;
+
+            const newProduct = {
+                title: title,
+                price: price,
+                creatorEmail: appState.userSession.email,
+                storeName: appState.userSession.businessName,
+                phone: appState.userSession.phone,
+                img: img
+            };
+
+            // Instant local layout preview update
+            appState.products.unshift(newProduct);
+            renderProducts(appState.products);
+            toggleModal('post-modal', false);
+            document.getElementById('post-form').reset();
+
+            // Fire and save data permanently inside Google Sheet backend 
+            try {
+                await fetch(GOOGLE_SCRIPT_API_URL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(newProduct)
+                });
+            } catch(err) {
+                console.error("Failed storing to Sheets database:", err);
+            }
+        }
+
+        function renderProducts(itemsList) {
+            const container = document.getElementById('products-container');
+            container.innerHTML = '';
+
+            if(itemsList.length === 0) {
+                container.innerHTML = `<p style="grid-column: 1/-1; text-align:center; padding: 20px; color:#888;">No items published yet.</p>`;
+                return;
+            }
+
+            itemsList.forEach(prod => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                const imageSrc = prod.img ? `<img src="${prod.img}" class="product-image" alt="${prod.title}">` : `<div class="product-image">📦 No Image</div>`;
+
+                card.innerHTML = `
+                    ${imageSrc}
+                    <div class="product-info">
+                        <div>
+                            <div class="product-title">${prod.title}</div>
+                            <div class="product-meta" style="cursor:pointer;" onclick="updateCallBanner('${prod.phone}')">🏪 Store: <strong>${prod.storeName}</strong></div>
+                        </div>
+                        <div>
+                            <div class="product-price">₦${prod.price}</div>
+                            <button class="order-btn" onclick="triggerMailOrder('${prod.creatorEmail}', '${prod.title}')">Order</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function triggerMailOrder(creatorEmail, itemTitle) {
+            const subject = encodeURIComponent(`New Order Inquiry: ${itemTitle}`);
+            const body = encodeURIComponent(`Hello,\n\nI am interested in ordering your product: "${itemTitle}".\n\nPlease let me know how to proceed.\n\nBest regards.`);
+            window.location.href = `mailto:${creatorEmail}?subject=${subject}&body=${body}`;
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtered = appState.products.filter(p => 
+                p.title.toLowerCase().includes(query) || 
+                p.storeName.toLowerCase().includes(query)
+            );
+            renderProducts(filtered);
+        }
+    </script>
+</body>
+</html>
