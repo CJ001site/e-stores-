@@ -185,21 +185,6 @@
             font-size: 0.95rem;
         }
 
-        .call-order-banner {
-            background-color: var(--banner-orange);
-            color: white;
-            text-align: center;
-            padding: 10px 15px;
-            font-weight: 600;
-            font-size: 1.05rem;
-        }
-
-        .call-order-banner a {
-            color: white;
-            text-decoration: none;
-            border-bottom: 1px dashed white;
-        }
-
         /* Products Grid */
         main {
             max-width: 1200px;
@@ -250,7 +235,9 @@
         }
 
         .product-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 5px; }
-        .product-meta { font-size: 0.85rem; color: #777; margin-bottom: 10px; }
+        .product-meta { font-size: 0.85rem; color: #777; margin-bottom: 4px; }
+        .product-phone { font-size: 0.85rem; color: #555; margin-bottom: 12px; }
+        .product-phone a { color: var(--banner-orange); text-decoration: none; font-weight: 600; }
         .product-price { font-size: 1.2rem; color: var(--primary-color); font-weight: 600; margin-bottom: 15px; }
 
         .order-btn {
@@ -389,9 +376,6 @@
                     <input type="text" id="search-input" oninput="handleSearch()" placeholder="Search items...">
                 </div>
             </div>
-            <div id="emergency-banner" class="call-order-banner">
-                CALL TO ORDER: <a id="banner-phone-link" href="tel:02018883300">02018883300</a>
-            </div>
         </header>
 
         <main id="main-content-area">
@@ -434,8 +418,8 @@
         const GOOGLE_SCRIPT_API_URL = "https://script.google.com/macros/s/AKfycbwxKGpHVljkfP9K0oT6_NEeZ5LdeB7HQ769pEiiMU_Od9kpITBuh8U79OCNNx9UHdsm/exec";
 
         let appState = {
-            authFlowContext: 'signup', // 'signup' or 'login'
-            currentMode: '', // 'user' or 'creator'
+            authFlowContext: 'signup', 
+            currentMode: '', 
             userSession: null,
             products: []
         };
@@ -489,7 +473,6 @@
             document.getElementById('auth-submit-btn').innerText = isLogin ? 'Access Dashboard' : 'Get Started';
             document.getElementById('auth-toggle-link').innerText = isLogin ? "Don't have an account? Sign Up" : "Already have an account? Login";
 
-            // Rules for displaying dynamic inputs based on context
             document.getElementById('group-code').classList.toggle('hidden', !isCreator || isLogin);
             document.getElementById('group-phone').classList.toggle('hidden', !isCreator || isLogin);
             document.getElementById('group-business').classList.toggle('hidden', !isCreator || isLogin);
@@ -506,22 +489,17 @@
             const email = document.getElementById('reg-email').value.trim();
 
             if (appState.authFlowContext === 'login') {
-                // Login flow logic
                 if (appState.currentMode === 'creator') {
-                    // Pulling store profiles from backend context simulation
                     appState.userSession = { email, businessName: "Creator Hub", phone: "02018883300", mode: 'creator' };
                     
                     const logo = document.getElementById('site-logo');
                     logo.innerText = "Creator Hub";
                     logo.classList.add('handwriting');
-                    updateCallBanner("02018883300");
                     document.getElementById('btn-drop-post').classList.remove('hidden');
                 } else {
                     appState.userSession = { email, username: email.split('@')[0], mode: 'user' };
-                    updateCallBanner("02018883300");
                 }
             } else {
-                // Existing registration flow logic
                 if (appState.currentMode === 'creator') {
                     const code = document.getElementById('reg-code').value;
                     const businessName = document.getElementById('reg-business').value;
@@ -538,12 +516,10 @@
                     logo.innerText = businessName;
                     logo.classList.add('handwriting');
 
-                    updateCallBanner(phone);
                     document.getElementById('btn-drop-post').classList.remove('hidden');
                 } else {
                     const username = document.getElementById('reg-username').value;
                     appState.userSession = { email, username, mode: 'user' };
-                    updateCallBanner("02018883300"); 
                 }
             }
 
@@ -554,12 +530,6 @@
             document.getElementById('welcome-user-msg').innerText = `Logged in as: ${appState.userSession.username || appState.userSession.businessName}`;
             
             await fetchDatabaseProducts();
-        }
-
-        function updateCallBanner(phoneNumber) {
-            const linkElement = document.getElementById('banner-phone-link');
-            linkElement.innerText = phoneNumber;
-            linkElement.href = `tel:${phoneNumber}`;
         }
 
         function switchView(viewName) {
@@ -628,8 +598,8 @@
                 title: title,
                 price: price,
                 creatorEmail: appState.userSession.email,
-                storeName: appState.userSession.businessName,
-                phone: appState.userSession.phone,
+                storeName: appState.userSession.businessName || "Independent Seller",
+                phone: appState.userSession.phone || "No Phone Provided",
                 img: imgData
             };
 
@@ -664,13 +634,16 @@
                 card.className = 'product-card';
                 
                 const imageSrc = prod.img ? `<img src="${prod.img}" class="product-image" alt="${prod.title}">` : `<div class="product-image">📦 No Image</div>`;
+                const sellerPhone = prod.phone ? prod.phone : "N/A";
 
                 card.innerHTML = `
                     ${imageSrc}
                     <div class="product-info">
                         <div>
                             <div class="product-title">${prod.title}</div>
-                            <div class="product-meta" style="cursor:pointer;" onclick="updateCallBanner('${prod.phone}')">🏪 Store: <strong>${prod.storeName}</strong></div>
+                            <div class="product-meta">🏪 Store: <strong>${prod.storeName}</strong></div>
+                            <!-- CREATOR PHONE DISPLAYED DIRECTLY BENEATH GOODS -->
+                            <div class="product-phone">📞 Contact: <a href="tel:${sellerPhone}"><strong>${sellerPhone}</strong></a></div>
                         </div>
                         <div>
                             <div class="product-price">₦${prod.price}</div>
