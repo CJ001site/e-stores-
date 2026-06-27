@@ -6,16 +6,20 @@
     <title>Multi-Mode Marketplace</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght=700&family=Poppins:wght=400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght=700&family=Poppins:wght=400;500;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary-color: #ff6b6b;
-            --secondary-color: #4ecdc4;
-            --dark-color: #2f2f2f;
-            --light-color: #f7f9fa;
+            --primary-color: #0084ff; /* FB Messenger Blue */
+            --secondary-color: #e4e6eb; /* FB Light Gray */
+            --dark-color: #050505;
+            --light-color: #f0f2f5;
             --banner-orange: #ff5722;
             --danger-color: #e63946;
+            --fb-bg-sent: #0084ff;
+            --fb-text-sent: #ffffff;
+            --fb-bg-received: #e4e6eb;
+            --fb-text-received: #050505;
         }
 
         * {
@@ -27,6 +31,7 @@
 
         body {
             color: var(--dark-color);
+            background-color: #f0f2f5;
             padding-bottom: 75px;
             min-height: 100vh;
         }
@@ -84,7 +89,7 @@
 
         .btn {
             background-color: white;
-            color: var(--primary-color);
+            color: #ff6b6b;
             padding: 12px 35px;
             border: none;
             border-radius: 25px;
@@ -104,21 +109,29 @@
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 2000;
         }
 
         .modal-content {
             background: white;
             padding: 30px;
             border-radius: 15px;
-            width: 90%;
-            max-width: 400px;
+            width: 95%;
+            max-width: 440px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             text-align: center;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        /* Large Profile View Specific adjustments */
+        .modal-content.large-view {
+            max-width: 700px;
+            width: 95%;
         }
 
         .input-group {
@@ -151,16 +164,15 @@
             display: inline-block;
             margin-top: 15px;
             font-size: 0.85rem;
-            color: var(--banner-orange);
+            color: var(--primary-color);
             cursor: pointer;
             text-decoration: underline;
         }
 
         /* Header Layout */
         header {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(5px);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -169,7 +181,7 @@
         .header-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 15px 20px;
+            padding: 12px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -179,14 +191,15 @@
 
         .site-title {
             font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--dark-color);
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: -0.5px;
         }
 
         .handwriting {
             font-family: 'Caveat', cursive;
             font-size: 2.3rem;
-            color: var(--primary-color);
+            color: #ff6b6b;
         }
 
         .search-bar {
@@ -196,34 +209,17 @@
 
         .search-bar input {
             width: 100%;
-            padding: 10px 15px;
-            border: 1px solid #e0e0e0;
+            padding: 10px 16px;
+            border: none;
             border-radius: 20px;
-            background-color: #f1f3f4;
+            background-color: #f0f2f5;
             font-size: 0.95rem;
+            outline: none;
         }
 
-        /* MAIN DASHBOARD RAINBOW SPHERICAL BACKGROUND */
+        /* MAIN DASHBOARD BACKGROUND */
         #app-dashboard {
             min-height: 100vh;
-            background: radial-gradient(circle at 20% 20%, #ffadad, transparent 40%),
-                        radial-gradient(circle at 80% 40%, #ffd6a5, transparent 40%),
-                        radial-gradient(circle at 40% 80%, #fdffb6, transparent 50%),
-                        radial-gradient(circle at 80% 80%, #caffbf, transparent 40%),
-                        radial-gradient(circle at 10% 60%, #9bf6ff, transparent 45%),
-                        radial-gradient(circle at 50% 30%, #a0c4ff, transparent 40%),
-                        radial-gradient(circle at 90% 10%, #bdb2ff, transparent 40%),
-                        radial-gradient(circle at 60% 70%, #ffc6ff, transparent 45%);
-            background-color: #f7f9fa;
-            background-attachment: fixed;
-            background-size: 200% 200%;
-            animation: sphericalRainbow 25s ease-wrap infinite alternate;
-        }
-
-        @keyframes sphericalRainbow {
-            0% { background-position: 0% 0%; }
-            50% { background-position: 50% 100%; }
-            100% { background-position: 100% 50%; }
         }
 
         main {
@@ -237,32 +233,32 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 25px;
-            background: rgba(255, 255, 255, 0.75);
+            background: white;
             padding: 12px 20px;
-            border-radius: 15px;
-            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
+            gap: 20px;
         }
 
         .product-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(5px);
-            border-radius: 12px;
+            background: white;
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
             position: relative;
+            text-align: left;
         }
 
         .product-image {
             width: 100%;
-            height: 200px;
+            height: 220px;
             background-color: #eaeaea;
             display: flex;
             align-items: center;
@@ -272,22 +268,21 @@
             object-fit: cover;
         }
 
-        /* Three Dot Options Button */
         .card-menu-btn {
             position: absolute;
             top: 10px;
             right: 10px;
-            background: rgba(255, 255, 255, 0.9);
-            width: 32px;
-            height: 32px;
+            background: rgba(255, 255, 255, 0.95);
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
             z-index: 10;
             border: none;
         }
@@ -301,117 +296,160 @@
         }
 
         .product-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 5px; }
-        .product-desc { font-size: 0.85rem; color: #555; margin-bottom: 10px; line-height: 1.3; }
-        .product-meta { font-size: 0.85rem; color: #777; margin-bottom: 4px; }
-        .product-phone { font-size: 0.85rem; color: #555; margin-bottom: 12px; }
-        .product-phone a { color: var(--banner-orange); text-decoration: none; font-weight: 600; }
-        .product-price { font-size: 1.2rem; color: var(--primary-color); font-weight: 600; margin-bottom: 15px; }
+        .product-desc { font-size: 0.85rem; color: #65676b; margin-bottom: 12px; line-height: 1.4; }
+        
+        .vendor-profile-anchor {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+        .vendor-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #ccc;
+            object-fit: cover;
+        }
+
+        .product-meta { font-size: 0.85rem; color: #65676b; }
+        .product-phone { font-size: 0.85rem; color: #65676b; margin-bottom: 12px; }
+        .product-phone a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .product-price { font-size: 1.25rem; color: var(--dark-color); font-weight: 700; margin-bottom: 15px; }
 
         .order-btn {
-            background-color: var(--secondary-color);
+            background-color: var(--primary-color);
             color: white;
             border: none;
             padding: 10px;
-            border-radius: 8px;
+            border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
             width: 100%;
         }
 
-        /* Chat Layout Window styles */
+        /* FACEBOOK MESSENGER SETUP LAYOUT */
         .chat-container {
             display: flex;
-            height: calc(100vh - 220px);
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(5px);
+            height: calc(100vh - 180px);
+            background: white;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         .chat-sidebar {
-            width: 30%;
-            border-right: 1px solid #eee;
+            width: 320px;
+            max-width: 35%;
+            border-right: 1px solid #e4e6eb;
             overflow-y: auto;
-            background: rgba(253, 253, 253, 0.8);
+            background: white;
+        }
+        .chat-sidebar-header {
+            padding: 15px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            border-bottom: 1px solid #f0f2f5;
         }
         .chat-vendor-item {
-            padding: 15px;
-            border-bottom: 1px solid #f5f5f5;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
             cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 600;
         }
         .chat-vendor-item:hover, .chat-vendor-item.active {
-            background: #f1f3f4;
-            color: var(--banner-orange);
+            background: #f5f6f7;
+        }
+        .chat-vendor-info {
+            flex: 1;
+            overflow: hidden;
+        }
+        .chat-vendor-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #050505;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .chat-window {
-            width: 70%;
+            flex: 1;
             display: flex;
             flex-direction: column;
-            background: rgba(250, 250, 250, 0.5);
+            background: white;
         }
         .chat-header {
-            padding: 15px;
+            padding: 12px 20px;
             background: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #e4e6eb;
+        }
+        .chat-header-name {
             font-weight: 600;
-            border-bottom: 1px solid #eee;
+            font-size: 1rem;
+            cursor: pointer;
         }
         .chat-messages {
             flex: 1;
-            padding: 15px;
+            padding: 20px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
+            background-color: #ffffff;
         }
         .msg-bubble {
-            padding: 10px 14px;
-            border-radius: 15px;
-            max-width: 70%;
-            font-size: 0.9rem;
+            padding: 8px 14px;
+            border-radius: 18px;
+            max-width: 60%;
+            font-size: 0.92rem;
             line-height: 1.4;
             word-break: break-word;
         }
         .msg-bubble.sent {
-            background: var(--secondary-color);
-            color: white;
+            background: var(--fb-bg-sent);
+            color: var(--fb-text-sent);
             align-self: flex-end;
-            border-bottom-right-radius: 2px;
         }
         .msg-bubble.received {
-            background: #e2e4e5;
-            color: var(--dark-color);
+            background: var(--fb-bg-received);
+            color: var(--fb-text-received);
             align-self: flex-start;
-            border-bottom-left-radius: 2px;
         }
         .chat-input-area {
-            padding: 12px;
+            padding: 15px;
             background: white;
             display: flex;
-            gap: 10px;
-            border-top: 1px solid #eee;
+            align-items: center;
+            gap: 12px;
+            border-top: 1px solid #e4e6eb;
         }
         .chat-input-area input {
             flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
+            padding: 10px 16px;
+            border: none;
+            background-color: #f0f2f5;
             border-radius: 20px;
             outline: none;
+            font-size: 0.95rem;
         }
         .chat-input-area button {
-            background: var(--primary-color);
-            color: white;
+            background: none;
+            color: var(--primary-color);
             border: none;
-            padding: 0 20px;
-            border-radius: 20px;
+            padding: 0 10px;
+            font-size: 1.3rem;
             cursor: pointer;
             font-weight: 600;
         }
 
         /* Engagement Box */
         .engagement-box {
-            border-top: 1px solid #f0f0f0;
+            border-top: 1px solid #f0f2f5;
             margin-top: 15px;
             padding-top: 10px;
         }
@@ -422,34 +460,43 @@
             margin-bottom: 10px;
         }
         .like-btn {
-            background: #f1f3f4;
+            background: #f0f2f5;
             border: none;
-            padding: 4px 10px;
-            border-radius: 12px;
+            padding: 6px 12px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 0.85rem;
+            font-weight: 500;
         }
         .comments-section {
-            background: #fafafa;
-            border-radius: 6px;
-            padding: 8px;
-            max-height: 100px;
+            background: #f0f2f5;
+            border-radius: 8px;
+            padding: 8px 12px;
+            max-height: 120px;
             overflow-y: auto;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             margin-bottom: 8px;
         }
-        .comment-item { margin-bottom: 4px; }
+        .comment-item { margin-bottom: 6px; }
         .comment-input-group { display: flex; gap: 5px; }
-        .comment-input-group input { flex: 1; padding: 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.8rem; }
-        .comment-input-group button { background: var(--dark-color); color: white; border: none; padding: 0 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; }
+        .comment-input-group input { flex: 1; padding: 8px 12px; border: none; background: #f0f2f5; border-radius: 20px; font-size: 0.85rem; outline: none; }
+        .comment-input-group button { background: var(--primary-color); color: white; border: none; padding: 0 14px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; }
 
         .profile-card-box {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
             margin-top: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            backdrop-filter: blur(5px);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .profile-card-box img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 3px solid var(--primary-color);
         }
 
         .logout-btn {
@@ -470,9 +517,8 @@
             position: fixed;
             bottom: 0; left: 0; right: 0;
             height: 65px;
-            background-color: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            background-color: white;
+            box-shadow: 0 -1px 3px rgba(0,0,0,0.08);
             display: flex;
             justify-content: space-around;
             align-items: center;
@@ -485,7 +531,7 @@
             align-items: center;
             justify-content: center;
             font-size: 0.75rem;
-            color: #777;
+            color: #65676b;
             cursor: pointer;
             background: none;
             border: none;
@@ -493,18 +539,16 @@
             height: 100%;
         }
 
-        .nav-item.active { color: var(--banner-orange); }
-        .nav-icon { font-size: 1.3rem; margin-bottom: 2px; }
+        .nav-item.active { color: var(--primary-color); font-weight: 600; }
+        .nav-icon { font-size: 1.4rem; margin-bottom: 2px; }
     </style>
 </head>
 <body>
 
-    <!-- COMPLAINTS SUPPORT BANNER -->
     <div class="top-support-banner">
         chat <a href="mailto:confidencejonathan62@gmail.com">confidencejonathan62@gmail.com</a> for complaints for both user and creator
     </div>
 
-    <!-- 1. WELCOME SCREEN -->
     <section id="welcome-screen">
         <h1>Welcome</h1>
         <div class="welcome-btn-group">
@@ -513,19 +557,17 @@
         </div>
     </section>
 
-    <!-- 2. MODE SELECTION MODAL -->
     <div id="mode-modal" class="modal-overlay hidden">
         <div class="modal-content">
             <h2 id="mode-modal-title">Select Account Mode</h2>
             <div class="mode-select-btns">
-                <button class="btn" style="background: var(--secondary-color); color: white; margin-bottom: 10px; width: 100%;" onclick="openForm('user')">User Mode</button>
-                <button class="btn" style="background: var(--primary-color); color: white; width: 100%;" onclick="openForm('creator')">Creator Mode</button>
+                <button class="btn" style="background: #0084ff; color: white; margin-bottom: 10px; width: 100%;" onclick="openForm('user')">User Mode</button>
+                <button class="btn" style="background: #ff6b6b; color: white; width: 100%;" onclick="openForm('creator')">Creator Mode</button>
             </div>
             <p class="toggle-form-link" id="mode-modal-toggle-link" onclick="switchModeModalContext()">Already have an account? Login</p>
         </div>
     </div>
 
-    <!-- 3. AUTHENTICATION MODAL -->
     <div id="auth-modal" class="modal-overlay hidden">
         <div class="modal-content">
             <h2 id="auth-title">Sign Up</h2>
@@ -550,13 +592,37 @@
                     <label for="reg-business">Business Name</label>
                     <input type="text" id="reg-business" placeholder="e.g., Becky's Stores">
                 </div>
+                <div class="input-group hidden" id="group-logo">
+                    <label for="reg-logo">Apply Your Business Logo</label>
+                    <input type="file" id="reg-logo" accept="image/*">
+                </div>
                 <button type="submit" id="auth-submit-btn" class="btn" style="width: 100%; background: var(--dark-color); color: white; margin-top: 10px;">Get Started</button>
             </form>
             <p class="toggle-form-link" id="auth-toggle-link" onclick="toggleAuthContext()">Already have an account? Login</p>
         </div>
     </div>
 
-    <!-- 4. CREATOR POST PRODUCT MODAL -->
+    <div id="vendor-action-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3 id="vendor-action-title">Vendor Options</h3>
+            <p style="margin-bottom: 20px; font-size: 0.9rem; color: #65676b;">Would you like to examine this verified vendor profile?</p>
+            <button class="btn" style="background: var(--primary-color); color: white; width: 100%; margin-bottom: 10px;" onclick="viewSelectedVendorProfile()">View Vendor's Profile</button>
+            <button class="btn" style="background: #ccc; color: white; width: 100%;" onclick="toggleModal('vendor-action-modal', false)">Cancel</button>
+        </div>
+    </div>
+
+    <div id="vendor-profile-preview-modal" class="modal-overlay hidden">
+        <div class="modal-content large-view">
+            <h3 style="margin-bottom: 15px;">Vendor Business Space</h3>
+            <div id="vendor-preview-card-header" style="padding: 15px; border-bottom: 1px solid #e4e6eb; margin-bottom: 20px; text-align: center;"></div>
+            
+            <h4 style="text-align: left; margin-bottom: 15px; font-size: 1.1rem; padding-left: 5px;">Catalog Products</h4>
+            <div class="products-grid" id="vendor-catalog-grid" style="margin-bottom: 20px;"></div>
+            
+            <button class="btn" style="background: var(--dark-color); color: white; width: 100%;" onclick="toggleModal('vendor-profile-preview-modal', false)">Exit Shop Space</button>
+        </div>
+    </div>
+
     <div id="post-modal" class="modal-overlay hidden">
         <div class="modal-content">
             <h2>Post a New Product</h2>
@@ -577,13 +643,12 @@
                     <label for="prod-file">Upload Product Image</label>
                     <input type="file" id="prod-file" accept="image/*">
                 </div>
-                <button type="submit" class="btn" style="width: 100%; background: var(--primary-color); color: white;">Publish Product</button>
+                <button type="submit" class="btn" style="width: 100%; background: #ff6b6b; color: white;">Publish Product</button>
                 <button type="button" class="btn" style="width: 100%; background: #ccc; color: white; margin-top: 10px;" onclick="toggleModal('post-modal', false)">Cancel</button>
             </form>
         </div>
     </div>
 
-    <!-- 5. MAIN DASHBOARD CONTENT -->
     <div id="app-dashboard" class="hidden">
         <header>
             <div class="header-container">
@@ -595,45 +660,46 @@
         </header>
 
         <main id="main-content-area">
-            <!-- Home View Layout -->
             <div id="home-view">
                 <div class="action-bar">
                     <h3 id="welcome-user-msg">Welcome Back!</h3>
-                    <button id="btn-drop-post" class="btn hidden" style="background: var(--primary-color); color: white;" onclick="toggleModal('post-modal', true)">+ Drop Post</button>
+                    <button id="btn-drop-post" class="btn hidden" style="background: #ff6b6b; color: white;" onclick="toggleModal('post-modal', true)">+ Drop Post</button>
                 </div>
                 <div class="products-grid" id="products-container"></div>
             </div>
 
-            <!-- Categories View Layout -->
-            <div id="categories-view" class="hidden" style="text-align: center; padding: 40px 10px; background: rgba(255,255,255,0.8); border-radius:15px; backdrop-filter: blur(5px);">
+            <div id="categories-view" class="hidden" style="text-align: center; padding: 40px 10px; background: white; border-radius:12px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
                 <h2>Categories</h2>
-                <p style="color:#777; margin-top:10px;">Clothes • Shoes • Electrical Appliances</p>
+                <p style="color:#65676b; margin-top:10px;">Clothes • Shoes • Electrical Appliances</p>
             </div>
 
-            <!-- Interactive Chat Phase View -->
             <div id="chats-view" class="hidden">
                 <div class="chat-container">
-                    <div class="chat-sidebar" id="chat-sidebar-list"></div>
+                    <div class="chat-sidebar">
+                        <div class="chat-sidebar-header">Chats</div>
+                        <div id="chat-sidebar-list"></div>
+                    </div>
                     <div class="chat-window">
-                        <div class="chat-header" id="active-chat-title">Select a vendor to chat</div>
+                        <div class="chat-header">
+                            <img id="active-chat-avatar" class="vendor-avatar hidden" src="" alt="" onclick="triggerVendorActionTab(appState.activeChatVendor)">
+                            <div class="chat-header-name" id="active-chat-title" onclick="triggerVendorActionTab(appState.activeChatVendor)">Select a chat context</div>
+                        </div>
                         <div class="chat-messages" id="chat-messages-box"></div>
                         <div class="chat-input-area">
-                            <input type="text" id="chat-user-input" placeholder="Type a message...">
-                            <button onclick="sendDirectChatMessage()">Send</button>
+                            <input type="text" id="chat-user-input" placeholder="Aa">
+                            <button onclick="sendDirectChatMessage()">🔵</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Account Center Profile View -->
             <div id="account-view" class="hidden" style="padding: 20px; max-width: 500px; margin: 0 auto;">
-                <h2>My Account Profile</h2>
+                <h2>Account Settings</h2>
                 <div id="profile-details-card" class="profile-card-box"></div>
                 <button class="logout-btn" onclick="handleLogOut()">Log Out Account</button>
             </div>
         </main>
 
-        <!-- Bottom Navigation Bar -->
         <nav class="bottom-nav">
             <button class="nav-item active" id="nav-home" onclick="switchView('home')">
                 <div class="nav-icon">🏠</div>
@@ -649,7 +715,7 @@
             </button>
             <button class="nav-item" id="nav-account" onclick="switchView('account')">
                 <div class="nav-icon">👤</div>
-                <div>Account</div>
+                <div>Profile Account</div>
             </button>
         </nav>
     </div>
@@ -664,7 +730,9 @@
             userSession: null,
             products: [],
             chats: {}, 
-            activeChatVendor: null
+            activeChatVendor: null,
+            targetActionVendor: null,
+            vendorProfiles: {} 
         };
 
         window.addEventListener('DOMContentLoaded', async () => {
@@ -729,6 +797,7 @@
             document.getElementById('group-code').classList.toggle('hidden', !isCreator || isLogin);
             document.getElementById('group-phone').classList.toggle('hidden', !isCreator || isLogin);
             document.getElementById('group-business').classList.toggle('hidden', !isCreator || isLogin);
+            document.getElementById('group-logo').classList.toggle('hidden', !isCreator || isLogin);
             document.getElementById('group-username').classList.toggle('hidden', isCreator || isLogin);
             
             document.getElementById('reg-phone').required = (isCreator && !isLogin);
@@ -746,7 +815,7 @@
 
             if (appState.authFlowContext === 'login') {
                 if (appState.currentMode === 'creator') {
-                    appState.userSession = { email, businessName: "Creator Hub", phone: "08030000000", mode: 'creator' };
+                    appState.userSession = { email, businessName: "Creator Hub", phone: "08030000000", mode: 'creator', logo: "" };
                 } else {
                     appState.userSession = { email, username: email.split('@')[0], mode: 'user' };
                 }
@@ -755,6 +824,8 @@
                     const enteredCode = document.getElementById('reg-code').value.trim();
                     const businessName = document.getElementById('reg-business').value;
                     const phone = document.getElementById('reg-phone').value.trim();
+                    const logoFile = document.getElementById('reg-logo').files[0];
+                    let logoData = "";
 
                     if (enteredCode !== SPECIAL_CREATOR_CODE) {
                         alert('Incorrect special verification code.');
@@ -764,7 +835,10 @@
                         alert('Please enter a valid 11-digit phone number.');
                         return;
                     }
-                    appState.userSession = { email, businessName, phone, mode: 'creator' };
+                    if(logoFile) {
+                        try { logoData = await convertFileToBase64(logoFile); } catch(err){console.error(err);}
+                    }
+                    appState.userSession = { email, businessName, phone, mode: 'creator', logo: logoData };
                 } else {
                     const username = document.getElementById('reg-username').value;
                     appState.userSession = { email, username, mode: 'user' };
@@ -786,10 +860,12 @@
                 logo.innerText = appState.userSession.businessName;
                 logo.classList.add('handwriting');
                 document.getElementById('btn-drop-post').classList.remove('hidden');
+                document.getElementById('nav-account').querySelector('div:last-child').innerText = "Creator Profile";
             } else {
                 logo.innerText = "Marketplace";
                 logo.classList.remove('handwriting');
                 document.getElementById('btn-drop-post').classList.add('hidden');
+                document.getElementById('nav-account').querySelector('div:last-child').innerText = "Account Center";
             }
             
             document.getElementById('welcome-user-msg').innerText = `Logged in as: ${appState.userSession.username || appState.userSession.businessName}`;
@@ -818,6 +894,63 @@
             } else {
                 openVendorChatThread(storeName);
             }
+        }
+
+        function triggerVendorActionTab(vendorName) {
+            if(!vendorName || vendorName === "Independent Seller") return;
+            appState.targetActionVendor = vendorName;
+            document.getElementById('vendor-action-title').innerText = vendorName;
+            toggleModal('vendor-action-modal', true);
+        }
+
+        /* DYNAMIC VENDOR VIEW WITH PRODUCT CATALOG LISTING */
+        function viewSelectedVendorProfile() {
+            toggleModal('vendor-action-modal', false);
+            const target = appState.targetActionVendor;
+            const profile = appState.vendorProfiles[target] || { logo: "", phone: "Unavailable", email: "Unavailable" };
+            
+            // Render Profile Info Header
+            const headerBox = document.getElementById('vendor-preview-card-header');
+            const logoSrc = profile.logo ? `<img src="${profile.logo}" style="width:90px; height:90px; border-radius:50%; object-fit:cover; border:2px solid #0084ff; margin-bottom:10px;">` : `<div style="width:90px; height:90px; border-radius:50%; background:#ccc; margin:0 auto 10px; display:flex; align-items:center; justify-content:center;">🏪</div>`;
+            
+            headerBox.innerHTML = `
+                ${logoSrc}
+                <h4 style="font-size:1.3rem; margin-bottom:5px;">${target}</h4>
+                <p style="font-size:0.85rem; color:#65676b; margin-bottom:4px;">📞 Contact Line: ${profile.phone}</p>
+                <p style="font-size:0.85rem; color:#65676b;">✉️ Email Contact: ${profile.email}</p>
+            `;
+
+            // Filter out and display only products that match this specific vendor name
+            const matchingProducts = appState.products.filter(p => p.storeName === target);
+            const catalogGrid = document.getElementById('vendor-catalog-grid');
+            catalogGrid.innerHTML = '';
+
+            if (matchingProducts.length === 0) {
+                catalogGrid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; padding: 20px; color:#888; font-style: italic;">This vendor has not posted any products yet.</p>`;
+            } else {
+                matchingProducts.forEach(prod => {
+                    const itemCard = document.createElement('div');
+                    itemCard.className = 'product-card';
+                    const imageSrc = prod.img ? `<img src="${prod.img}" class="product-image" alt="${prod.title}">` : `<div class="product-image">📦 No Image</div>`;
+                    
+                    itemCard.innerHTML = `
+                        ${imageSrc}
+                        <div class="product-info">
+                            <div>
+                                <div class="product-title">${prod.title}</div>
+                                <div class="product-desc">${prod.desc}</div>
+                            </div>
+                            <div>
+                                <div class="product-price" style="margin-bottom:8px;">₦${prod.price}</div>
+                                <button class="order-btn" onclick="triggerMailOrder('${prod.creatorEmail}', '${prod.title}')">Order</button>
+                            </div>
+                        </div>
+                    `;
+                    catalogGrid.appendChild(itemCard);
+                });
+            }
+
+            toggleModal('vendor-profile-preview-modal', true);
         }
 
         function openVendorChatThread(vendorName) {
@@ -855,16 +988,25 @@
             
             const conversationVendors = Object.keys(appState.chats);
             if(conversationVendors.length === 0) {
-                sidebar.innerHTML = `<div style="padding:15px; font-size:0.8rem; color:#888; text-align:center;">No active chats. Use the product card option menu (three dots) to chat vendors!</div>`;
-                document.getElementById('active-chat-title').innerText = "Select a Vendor";
+                sidebar.innerHTML = `<div style="padding:15px; font-size:0.8rem; color:#888; text-align:center;">No active chats. Tap a vendor's avatar profile or option menu on any product card to begin chat!</div>`;
+                document.getElementById('active-chat-title').innerText = "Select a Chat Context";
+                document.getElementById('active-chat-avatar').classList.add('hidden');
                 document.getElementById('chat-messages-box').innerHTML = '';
                 return;
             }
 
             conversationVendors.forEach(vendor => {
+                const cachedProfile = appState.vendorProfiles[vendor] || {};
+                const imgTag = cachedProfile.logo ? `<img src="${cachedProfile.logo}" class="vendor-avatar" alt="">` : `<div class="vendor-avatar" style="background:#e4e6eb; display:flex; align-items:center; justify-content:center; font-size:0.8rem;">🏪</div>`;
+                
                 const item = document.createElement('div');
                 item.className = `chat-vendor-item ${appState.activeChatVendor === vendor ? 'active' : ''}`;
-                item.innerText = vendor;
+                item.innerHTML = `
+                    ${imgTag}
+                    <div class="chat-vendor-info">
+                        <div class="chat-vendor-name">${vendor}</div>
+                    </div>
+                `;
                 item.onclick = () => {
                     appState.activeChatVendor = vendor;
                     renderChatsInterface();
@@ -874,6 +1016,16 @@
 
             if(appState.activeChatVendor) {
                 document.getElementById('active-chat-title').innerText = appState.activeChatVendor;
+                const activeAvatar = document.getElementById('active-chat-avatar');
+                const matchedProfile = appState.vendorProfiles[appState.activeChatVendor];
+                
+                if(matchedProfile && matchedProfile.logo) {
+                    activeAvatar.src = matchedProfile.logo;
+                    activeAvatar.classList.remove('hidden');
+                } else {
+                    activeAvatar.classList.add('hidden');
+                }
+
                 const msgBox = document.getElementById('chat-messages-box');
                 msgBox.innerHTML = '';
                 
@@ -892,14 +1044,12 @@
             const text = input.value.trim();
             if(!text || !appState.activeChatVendor || !appState.userSession) return;
 
-            // Append to screen instantly
             appState.chats[appState.activeChatVendor].push({ sender: 'sent', text: text });
             input.value = '';
             renderChatsInterface();
 
             const userKey = appState.userSession.username || appState.userSession.businessName;
 
-            // Submit Payload directly into your Sheet database deployment
             const chatPayload = {
                 type: "chat_message",
                 user: userKey,
@@ -918,7 +1068,6 @@
                 });
             } catch (err) { console.error(err); }
 
-            // Automatic demo system answering reply logic
             setTimeout(async () => {
                 if(appState.chats[appState.activeChatVendor]) {
                     const dynamicReply = "Alright, received! Let's arrange delivery or check available stock.";
@@ -952,12 +1101,14 @@
         function renderProfileView() {
             const infoCard = document.getElementById('profile-details-card');
             if(appState.userSession) {
+                const imageSection = appState.userSession.logo ? `<img src="${appState.userSession.logo}" alt="Business Logo">` : `<div style="width:100px; height:100px; border-radius:50%; background:#ccc; margin:0 auto 15px; display:flex; align-items:center; justify-content:center; font-size:2rem;">👤</div>`;
+                
                 infoCard.innerHTML = `
-                    <p><strong>Account Mode:</strong> ${appState.userSession.mode.toUpperCase()}</p>
-                    <p><strong>Email:</strong> ${appState.userSession.email}</p>
-                    ${appState.userSession.username ? `<p><strong>Username:</strong> ${appState.userSession.username}</p>` : ''}
-                    ${appState.userSession.businessName ? `<p><strong>Business Name:</strong> ${appState.userSession.businessName}</p>` : ''}
-                    ${appState.userSession.phone ? `<p><strong>Contact Line:</strong> ${appState.userSession.phone}</p>` : ''}
+                    ${imageSection}
+                    <h3 style="margin-bottom:15px;">${appState.userSession.username || appState.userSession.businessName}</h3>
+                    <p style="text-align:left; margin-bottom:8px;"><strong>Account Mode:</strong> ${appState.userSession.mode.toUpperCase()}</p>
+                    <p style="text-align:left; margin-bottom:8px;"><strong>Email:</strong> ${appState.userSession.email}</p>
+                    ${appState.userSession.phone ? `<p style="text-align:left; margin-bottom:8px;"><strong>Contact Line:</strong> ${appState.userSession.phone}</p>` : ''}
                 `;
             }
         }
@@ -980,18 +1131,30 @@
             try {
                 const response = await fetch(GOOGLE_SCRIPT_API_URL);
                 const data = await response.json();
-                appState.products = data.map((p, index) => ({
-                    id: p.id || `prod-${Date.now()}-${index}`,
-                    title: p.title,
-                    desc: p.desc || "No product description provided.",
-                    price: p.price,
-                    creatorEmail: p.creatorEmail,
-                    storeName: p.storeName,
-                    phone: p.phone,
-                    img: p.img,
-                    likes: p.likes || 0,
-                    comments: p.comments || []
-                }));
+                appState.products = data.map((p, index) => {
+                    const item = {
+                        id: p.id || `prod-${Date.now()}-${index}`,
+                        title: p.title,
+                        desc: p.desc || "No product description provided.",
+                        price: p.price,
+                        creatorEmail: p.creatorEmail,
+                        storeName: p.storeName,
+                        phone: p.phone,
+                        img: p.img,
+                        vendorLogo: p.vendorLogo || "", 
+                        likes: p.likes || 0,
+                        comments: p.comments || []
+                    };
+                    
+                    if(item.storeName && !appState.vendorProfiles[item.storeName]) {
+                        appState.vendorProfiles[item.storeName] = {
+                            logo: item.vendorLogo,
+                            phone: item.phone,
+                            email: item.creatorEmail
+                        };
+                    }
+                    return item;
+                });
                 renderProducts(appState.products);
             } catch (err) {
                 console.error("Database connection failure:", err);
@@ -1029,6 +1192,7 @@
                 storeName: appState.userSession.businessName || "Independent Seller",
                 phone: appState.userSession.phone || "No Phone Provided",
                 img: imgData,
+                vendorLogo: appState.userSession.logo || "", 
                 likes: 0,
                 comments: []
             };
@@ -1080,6 +1244,8 @@
                 const imageSrc = prod.img ? `<img src="${prod.img}" class="product-image" alt="${prod.title}">` : `<div class="product-image">📦 No Image</div>`;
                 const sellerPhone = prod.phone ? prod.phone : "N/A";
                 let commentsHtml = prod.comments.map(c => `<div class="comment-item">${c}</div>`).join('');
+                
+                const logoAvatarSrc = prod.vendorLogo ? `<img src="${prod.vendorLogo}" class="vendor-avatar">` : `<div class="vendor-avatar" style="background:#e4e6eb; display:flex; align-items:center; justify-content:center;">🏪</div>`;
 
                 card.innerHTML = `
                     <button class="card-menu-btn" onclick="handleThreeDotAction('${prod.id}', '${prod.storeName}')">⋮</button>
@@ -1087,9 +1253,12 @@
                     ${imageSrc}
                     <div class="product-info">
                         <div>
+                            <div class="vendor-profile-anchor" onclick="triggerVendorActionTab('${prod.storeName}')">
+                                ${logoAvatarSrc}
+                                <div class="product-meta">🏪 Store: <strong>${prod.storeName}</strong></div>
+                            </div>
                             <div class="product-title">${prod.title}</div>
                             <div class="product-desc">${prod.desc}</div>
-                            <div class="product-meta">🏪 Store: <strong>${prod.storeName}</strong></div>
                             <div class="product-phone">📞 Contact: <a href="tel:${sellerPhone}"><strong>${sellerPhone}</strong></a></div>
                         </div>
                         <div>
@@ -1106,7 +1275,7 @@
                                 ${commentsHtml || '<span style="color:#aaa; font-style:italic;">No reviews yet.</span>'}
                             </div>
                             <div class="comment-input-group">
-                                <input type="text" placeholder="Add recommendation..." id="input-${prod.id}">
+                                <input type="text" placeholder="Write a recommendation..." id="input-${prod.id}">
                                 <button onclick="addComment('${prod.id}', document.getElementById('input-${prod.id}'))">Send</button>
                             </div>
                         </div>
